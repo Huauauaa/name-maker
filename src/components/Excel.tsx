@@ -4,7 +4,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import * as XLSX from 'xlsx';
 import InputFiles from 'react-input-files';
 
-function Excel() {
+function Excel({ setData }: ExcelProps) {
   const onImportExcel = (files: FileList) => {
     const fileReader: MyFileReader = new FileReader();
     for (let index = 0; index < files.length; index++) {
@@ -36,6 +36,7 @@ function Excel() {
           }
         }
         console.table(data);
+        setData(data);
       } catch (e) {
         message.warn(e);
         return;
