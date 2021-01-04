@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.less';
-import { Button } from 'antd';
+import Excel from './components/Excel';
 
 function App() {
   return (
     <div className="App">
-      <Button type="primary">ant</Button>
+      <Excel></Excel>
     </div>
   );
 }
