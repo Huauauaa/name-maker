@@ -26,7 +26,9 @@ function NameList() {
       },
     },
   ];
-  return <Table dataSource={context} columns={columns} />;
+  return (
+    <Table dataSource={context} columns={columns} title={() => '姓名列表'} />
+  );
 }
 
 export default NameList;
