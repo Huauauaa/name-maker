@@ -1,4 +1,5 @@
 declare module 'react-input-files';
+declare module 'uuid/v4';
 
 interface MyFileReader extends FileReader {
   name?: string;
@@ -11,5 +12,14 @@ interface ExcelProps {
 interface NameType {
   name: string;
   pinyins?: [string];
-  key?: number;
+  key?: string;
+  id?: string;
+  [string]: string;
+}
+
+interface NameInfoProps {
+  isModalVisible: boolean;
+  setIsModalVisible: React.Dispatch;
+  nameInfo: NameType;
+  type: string;
 }

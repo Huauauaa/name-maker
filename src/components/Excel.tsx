@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import * as XLSX from 'xlsx';
 import InputFiles from 'react-input-files';
+import DataContext from '../contexts/data-context';
+import _ from 'lodash';
+import uuid from 'uuid/v4';
 const pinyin = require('pinyin');
 
-function Excel({ setData }: ExcelProps) {
+function Excel() {
+  const { setData } = useContext(DataContext);
+
   const onImportExcel = (files: FileList) => {
     const fileReader: MyFileReader = new FileReader();
     for (let index = 0; index < files.length; index++) {
@@ -37,12 +42,13 @@ function Excel({ setData }: ExcelProps) {
           }
         }
         console.table(data);
-        const pinyinData = data.map((item: NameType, index: number) => ({
+        const pinyinData = data.map((item: NameType) => ({
           ...item,
-          pinyins: pinyin(item.name.slice(1), { style: pinyin.STYLE_NORMAL }),
-          key: index,
+          pinyins: pinyin(item.name, { style: pinyin.STYLE_NORMAL }),
+          key: uuid(),
         }));
-        setData(pinyinData);
+        const cachedData = JSON.parse(localStorage.getItem('data') || '[]');
+        setData(_.unionBy(pinyinData, cachedData, 'name'));
       } catch (e) {
         message.warn(e);
         return;
@@ -50,13 +56,11 @@ function Excel({ setData }: ExcelProps) {
     };
   };
   return (
-    <div>
-      <InputFiles accept=".xlsx, .xls" onChange={onImportExcel}>
-        <Button type="primary">
-          <UploadOutlined /> 上传文件
-        </Button>
-      </InputFiles>
-    </div>
+    <InputFiles accept=".xlsx, .xls" onChange={onImportExcel}>
+      <Button type="primary" icon={<UploadOutlined />}>
+        上传
+      </Button>
+    </InputFiles>
   );
 }
 
