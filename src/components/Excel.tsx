@@ -37,9 +37,10 @@ function Excel({ setData }: ExcelProps) {
           }
         }
         console.table(data);
-        const pinyinData = data.map((item: any) => ({
+        const pinyinData = data.map((item: NameType, index: number) => ({
           ...item,
-          pinyins: pinyin(item.name, { style: pinyin.STYLE_NORMAL }),
+          pinyins: pinyin(item.name.slice(1), { style: pinyin.STYLE_NORMAL }),
+          key: index,
         }));
         setData(pinyinData);
       } catch (e) {
@@ -51,8 +52,8 @@ function Excel({ setData }: ExcelProps) {
   return (
     <div>
       <InputFiles accept=".xlsx, .xls" onChange={onImportExcel}>
-        <Button>
-          <UploadOutlined />
+        <Button type="primary">
+          <UploadOutlined /> 上传文件
         </Button>
       </InputFiles>
     </div>

@@ -6,9 +6,9 @@ function NameList() {
   const context = useContext(DataContext);
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
+      title: '序号',
+      dataIndex: 'key',
+      key: 'key',
     },
     {
       title: '姓名',
@@ -19,12 +19,14 @@ function NameList() {
       title: '拼音',
       dataIndex: 'pinyins',
       key: 'pinyins',
-      render: (pinyins: any) => {
-        return pinyins.map((item: any) => <Tag>{item}</Tag>);
+      render: (pinyins: [string]) => {
+        return pinyins.map((item: string, index: number) => (
+          <Tag key={index}>{item}</Tag>
+        ));
       },
     },
   ];
-  return <Table dataSource={context} columns={columns} rowKey="id" />;
+  return <Table dataSource={context} columns={columns} />;
 }
 
 export default NameList;

@@ -7,3 +7,9 @@ interface MyFileReader extends FileReader {
 interface ExcelProps {
   setData: (any) => void;
 }
+
+interface NameType {
+  name: string;
+  pinyins?: [string];
+  key?: number;
+}
