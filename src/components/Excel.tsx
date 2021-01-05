@@ -3,6 +3,7 @@ import { Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import * as XLSX from 'xlsx';
 import InputFiles from 'react-input-files';
+const pinyin = require('pinyin');
 
 function Excel({ setData }: ExcelProps) {
   const onImportExcel = (files: FileList) => {
@@ -36,7 +37,11 @@ function Excel({ setData }: ExcelProps) {
           }
         }
         console.table(data);
-        setData(data);
+        const pinyinData = data.map((item: any) => ({
+          ...item,
+          pinyins: pinyin(item.name, { style: pinyin.STYLE_NORMAL }),
+        }));
+        setData(pinyinData);
       } catch (e) {
         message.warn(e);
         return;

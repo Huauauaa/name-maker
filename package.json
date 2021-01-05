@@ -14,6 +14,7 @@
     "@types/react-dom": "^16.9.8",
     "antd": "^4.10.0",
     "craco-less": "^1.17.1",
+    "pinyin": "^2.9.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-input-files": "^1.2.0",
