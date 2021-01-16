@@ -14,4 +14,18 @@ module.exports = {
       },
     },
   ],
+  devServer: (devServerConfig, { env, paths, proxy, allowedHost }) => {
+    devServerConfig.proxy = {
+      '/api': {
+        target: 'https://node-demo-harvey.herokuapp.com/',
+        changeOrigin: true,
+        ws: false,
+        pathRewrite: {
+          '^/api': '/api',
+        },
+        secure: false,
+      },
+    };
+    return devServerConfig;
+  },
 };

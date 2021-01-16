@@ -16,6 +16,7 @@
     "@types/react-router-dom": "^5.1.7",
     "@types/uuid": "^8.3.0",
     "antd": "^4.10.0",
+    "axios": "^0.21.1",
     "craco-less": "^1.17.1",
     "lodash": "^4.17.20",
     "pinyin": "^2.9.1",
