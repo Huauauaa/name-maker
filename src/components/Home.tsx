@@ -1,24 +1,40 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useContext,
+  SyntheticEvent,
+  Dispatch,
+  SetStateAction,
+} from 'react';
 import { Input, Table, List, Tag } from 'antd';
 import DataContext from '../contexts/data-context';
 import _ from 'lodash';
 import '../assets/home.less';
 import http from '../http';
+import { PlusOutlined } from '@ant-design/icons';
+import uuid from 'uuid/v4';
 
 const { Search } = Input;
 const pinyin = require('pinyin');
 
 function Home() {
+  const cachedCandidates = JSON.parse(
+    localStorage.getItem('candidates') || '[]',
+  );
   const [input, setInput] = useState('');
   const [target, setTarget] = useState([]);
   const { data } = useContext(DataContext);
   const [wordInfo, setWordInfo] = useState([]);
+  const [candidates, setCandidates]: [
+    any,
+    Dispatch<SetStateAction<any>>,
+  ] = useState(cachedCandidates);
+  const [candidateInput, setCandidateInput] = useState('');
 
   const onSearch = async (value: string) => {
     setInput(value);
     try {
-      const response = await http
-      .get(`/word`, {
+      const response = await http.get(`/word`, {
         params: {
           wd: value,
           t: Date.now(),
@@ -45,6 +61,10 @@ function Home() {
     }
   }, [input, data]);
 
+  useEffect(() => {
+    localStorage.setItem('candidates', JSON.stringify(candidates));
+  }, [candidates]);
+
   const columns = [
     {
       title: 'label',
@@ -70,6 +90,21 @@ function Home() {
     },
   ];
 
+  const onAddCandidate = (e: SyntheticEvent) => {
+    const newCandidates = candidateInput.split('').map((item: string) => {
+      return {
+        id: uuid(),
+        name: item,
+      };
+    });
+    setCandidates(_.unionBy(candidates, newCandidates, 'name'));
+    setCandidateInput('');
+  };
+
+  const onRemoveCandidate = (id: string) => {
+    setCandidates(candidates.filter((item: Candidate) => item.id !== id));
+  };
+
   return (
     <div className="home-wrapper">
       <Search
@@ -83,6 +118,30 @@ function Home() {
       <div className="search-result">
         {target.map((item: any) => item.name).join(', ')}
       </div>
+      <Input
+        addonAfter={<PlusOutlined onClick={onAddCandidate} />}
+        value={candidateInput}
+        allowClear
+        onPressEnter={onAddCandidate}
+        onChange={(e) => {
+          setCandidateInput(e.target.value.replace(' ', ''));
+        }}
+      />
+      <div className="candidates">
+        {candidates.map((item: Candidate) => {
+          return (
+            <Tag
+              key={item.id}
+              closable
+              onClose={() => onRemoveCandidate(item.id)}
+              className="candidate-item"
+            >
+              {item.name}
+            </Tag>
+          );
+        })}
+      </div>
+
       <Table
         dataSource={wordInfo.map((item: any, index) => ({
           ...item,

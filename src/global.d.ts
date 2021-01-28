@@ -23,3 +23,8 @@ interface NameInfoProps {
   nameInfo: NameType;
   type: string;
 }
+
+type Candidate = {
+  id: string;
+  name: string;
+};
