@@ -14,18 +14,20 @@ function Home() {
   const { data } = useContext(DataContext);
   const [wordInfo, setWordInfo] = useState([]);
 
-  const onSearch = (value: string) => {
-    http
+  const onSearch = async (value: string) => {
+    setInput(value);
+    try {
+      const response = await http
       .get(`/word`, {
         params: {
           wd: value,
           t: Date.now(),
         },
-      })
-      .then((response) => {
-        setWordInfo(response as any);
-        setInput(value);
       });
+      setWordInfo(response as any);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
