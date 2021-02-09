@@ -1,7 +1,8 @@
 import React, { useEffect, useContext } from 'react';
 import { Modal, Form, Input } from 'antd';
 import DataContext from '../contexts/data-context';
-import uuid from 'uuid/v4';
+import http from '../http';
+import _ from 'lodash';
 
 const pinyin = require('pinyin');
 
@@ -17,7 +18,7 @@ function NameInfo({
   type,
 }: NameInfoProps) {
   const [form] = Form.useForm();
-  const { data, setData } = useContext(DataContext);
+  const { setData } = useContext(DataContext);
 
   useEffect(() => {
     if (isModalVisible) {
@@ -35,7 +36,7 @@ function NameInfo({
     setIsModalVisible(false);
   };
 
-  const onFinish = (values: NameType) => {
+  const onFinish = async (values: NameType) => {
     const pinyinKeys = Object.keys(values).filter((key) =>
       key.startsWith('pinyin'),
     );
@@ -43,20 +44,18 @@ function NameInfo({
       const newName = {
         ...nameInfo,
         name: values.name,
-        pinyins: pinyinKeys.map((key: string) => (values as any)[key]),
+        pinyin: pinyinKeys.map((key: string) => (values as any)[key]),
       };
-      const index = data.findIndex(
-        (item: NameType) => item.key === nameInfo.key,
-      );
-      setData([...data.slice(0, index), newName, ...data.slice(index + 1)]);
+      await http.put(`/name`, newName);
     } else {
       const newName = {
         name: values.name,
-        pinyins: pinyin(values.name, { style: pinyin.STYLE_NORMAL }),
-        key: uuid(),
+        pinyin: _.flatten(pinyin(values.name, { style: pinyin.STYLE_NORMAL })),
       };
-      setData([newName, ...data]);
+      await http.post(`/name`, newName);
     }
+    const response: any = await http.get(`/name`);
+    setData(response);
   };
 
   const onFinishFailed = (errorInfo: any) => {
@@ -79,7 +78,7 @@ function NameInfo({
         {...layout}
         name="basic"
         onFinish={onFinish}
-        initialValues={{ name: nameInfo.name, pinyins: nameInfo.pinyins }}
+        initialValues={{ name: nameInfo.name, pinyin: nameInfo.pinyin }}
         onFinishFailed={onFinishFailed}
       >
         <Form.Item
@@ -89,7 +88,7 @@ function NameInfo({
         >
           <Input />
         </Form.Item>
-        {nameInfo.pinyins?.map((item, index) => (
+        {nameInfo.pinyin?.map((item, index) => (
           <Form.Item
             label={`拼音${index + 1}`}
             name={`pinyin${index}`}

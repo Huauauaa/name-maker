@@ -10,8 +10,8 @@ function NameList({ onDelete, onEdit }: any) {
   const columns = [
     {
       title: '序号',
-      dataIndex: 'index',
-      key: 'index',
+      dataIndex: '_id',
+      key: '_id',
     },
     {
       title: '姓名',
@@ -20,10 +20,10 @@ function NameList({ onDelete, onEdit }: any) {
     },
     {
       title: '拼音',
-      dataIndex: 'pinyins',
-      key: 'pinyins',
-      render: (pinyins: [string]) => {
-        return pinyins.map((item: string, index: number) => (
+      dataIndex: 'pinyin',
+      key: 'pinyin',
+      render: (pinyin: [string]) => {
+        return pinyin.map((item: string, index: number) => (
           <Tag key={index}>{item}</Tag>
         ));
       },
@@ -39,7 +39,7 @@ function NameList({ onDelete, onEdit }: any) {
           />
           <Popconfirm
             title="确认删除?"
-            onConfirm={() => onDelete(record.key)}
+            onConfirm={() => onDelete(record._id)}
             onCancel={() => {}}
             okText="是"
             cancelText="否"
@@ -51,18 +51,14 @@ function NameList({ onDelete, onEdit }: any) {
     },
   ];
   return (
-    <>
-      <Table
-        dataSource={data.map((item: NameType, index) => ({
-          ...item,
-          index: index + 1,
-        }))}
-        columns={columns}
-        pagination={{
-          showTotal: (total) => `共 ${total} 项`,
-        }}
-      />
-    </>
+    <Table
+      dataSource={data}
+      columns={columns}
+      rowKey="_id"
+      pagination={{
+        showTotal: (total) => `共 ${total} 项`,
+      }}
+    />
   );
 }
 

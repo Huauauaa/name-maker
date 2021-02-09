@@ -5,11 +5,12 @@ import * as XLSX from 'xlsx';
 import InputFiles from 'react-input-files';
 import DataContext from '../contexts/data-context';
 import _ from 'lodash';
-import uuid from 'uuid/v4';
+import http from '../http';
+
 const pinyin = require('pinyin');
 
 function Excel() {
-  const { setData } = useContext(DataContext);
+  const { data, setData } = useContext(DataContext);
 
   const onImportExcel = (files: FileList) => {
     const fileReader: MyFileReader = new FileReader();
@@ -17,7 +18,7 @@ function Excel() {
       fileReader.name = files[index].name;
     }
     fileReader.readAsBinaryString(files[0]);
-    fileReader.onload = (event: any) => {
+    fileReader.onload = async (event: any) => {
       try {
         const validExts = ['.xlsx', '.xls'];
         const fileExt = event?.target?.name;
@@ -33,22 +34,23 @@ function Excel() {
 
         const { result } = event.target;
         const workbook = XLSX.read(result, { type: 'binary' });
-        let data: any[] = [];
+        let excelData: any[] = [];
         for (const sheet in workbook.Sheets) {
           if (workbook.Sheets.hasOwnProperty(sheet)) {
-            data = data.concat(
+            excelData = excelData.concat(
               XLSX.utils.sheet_to_json(workbook.Sheets[sheet]),
             );
           }
         }
-        console.table(data);
-        const pinyinData = data.map((item: NameType) => ({
+        console.table(excelData);
+        const pinyinData = excelData.map((item: NameType) => ({
           ...item,
-          pinyins: pinyin(item.name, { style: pinyin.STYLE_NORMAL }),
-          key: uuid(),
+          pinyin: _.flatten(pinyin(item.name, { style: pinyin.STYLE_NORMAL })),
         }));
-        const cachedData = JSON.parse(localStorage.getItem('data') || '[]');
-        setData(_.unionBy(pinyinData, cachedData, 'name'));
+
+        await http.post(`/names`, _.differenceBy(pinyinData, data, 'name'));
+        const response: any = await http.get(`/name`);
+        setData(response);
       } catch (e) {
         message.warn(e);
         return;

@@ -6,15 +6,22 @@ import NameInfo from '../components/NameInfo';
 import Excel from '../components/Excel';
 import '../assets/dashboard.less';
 import { PlusOutlined } from '@ant-design/icons';
+import http from '../http';
 
 function Dashboard() {
-  const { data, setData } = useContext(DataContext);
+  const { setData } = useContext(DataContext);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [nameInfo, setNameInfo] = useState({ name: '' });
   const [operationType, setOperationType] = useState('');
 
-  const onDelete = (key: string): void => {
-    setData(data.filter((item: NameType) => item.key !== key));
+  const onDelete = async (id: string) => {
+    await http.delete(`/name`, {
+      params: {
+        _id: id,
+      },
+    });
+    const response: any = await http.get(`/name`);
+    setData(response);
   };
 
   const onEdit = (nameInfo: NameType): void => {

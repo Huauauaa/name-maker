@@ -6,15 +6,18 @@ import { UnorderedListOutlined, HomeOutlined } from '@ant-design/icons';
 
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import routers from './route';
+import http from './http';
 
 function App() {
   const menuRef = useRef(null);
-  const cachedData = JSON.parse(localStorage.getItem('data') || '[]');
-  const [data, setData] = useState(cachedData);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    localStorage.setItem('data', JSON.stringify(data));
-  }, [data]);
+    (async () => {
+      const response: any = await http.get(`/name`);
+      setData(response);
+    })();
+  }, []);
 
   return (
     <div className="App">

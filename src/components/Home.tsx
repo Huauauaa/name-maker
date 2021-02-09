@@ -52,7 +52,7 @@ function Home() {
       setTarget(
         data.filter(
           (item: any) =>
-            _.intersection(_.flatten(inputPinyins), _.flatten(item.pinyins))
+            _.intersection(_.flatten(inputPinyins), _.flatten(item.pinyin))
               .length > 0,
         ),
       );

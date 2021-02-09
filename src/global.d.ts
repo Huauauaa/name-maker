@@ -11,7 +11,7 @@ interface ExcelProps {
 
 interface NameType {
   name: string;
-  pinyins?: [string];
+  pinyin?: [string];
   key?: string;
   id?: string;
   [string]: string;
