@@ -1,6 +1,6 @@
 import axios from 'axios';
 const http = axios.create({
-  baseURL: 'http://node-demo-harvey.herokuapp.com/api',
+  baseURL: 'https://node-demo-harvey.herokuapp.com/api',
   timeout: 60e3,
 });
 
