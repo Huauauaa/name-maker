@@ -7,6 +7,7 @@ import Excel from '../components/Excel';
 import '../assets/dashboard.less';
 import { PlusOutlined } from '@ant-design/icons';
 import http from '../http';
+import { AxiosResponse } from 'axios';
 
 function Dashboard() {
   const { setData } = useContext(DataContext);
@@ -20,7 +21,7 @@ function Dashboard() {
         _id: id,
       },
     });
-    const response: any = await http.get(`/name`);
+    const response: AxiosResponse = await http.get(`/name`);
     setData(response);
   };
 

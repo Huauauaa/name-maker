@@ -3,6 +3,7 @@ import { Modal, Form, Input } from 'antd';
 import DataContext from '../contexts/data-context';
 import http from '../http';
 import _ from 'lodash';
+import { AxiosResponse } from 'axios';
 
 const pinyin = require('pinyin');
 
@@ -54,7 +55,7 @@ function NameInfo({
       };
       await http.post(`/name`, newName);
     }
-    const response: any = await http.get(`/name`);
+    const response: AxiosResponse = await http.get(`/name`);
     setData(response);
   };
 
@@ -86,7 +87,11 @@ function NameInfo({
           name="name"
           rules={[{ required: true, message: '请输入姓名' }]}
         >
-          <Input />
+          <Input
+            onPressEnter={() => {
+              form.submit();
+            }}
+          />
         </Form.Item>
         {nameInfo.pinyin?.map((item, index) => (
           <Form.Item

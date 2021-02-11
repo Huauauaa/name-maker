@@ -6,6 +6,7 @@ import InputFiles from 'react-input-files';
 import DataContext from '../contexts/data-context';
 import _ from 'lodash';
 import http from '../http';
+import { AxiosResponse } from 'axios';
 
 const pinyin = require('pinyin');
 
@@ -49,7 +50,7 @@ function Excel() {
         }));
 
         await http.post(`/names`, _.differenceBy(pinyinData, data, 'name'));
-        const response: any = await http.get(`/name`);
+        const response: AxiosResponse = await http.get(`/name`);
         setData(response);
       } catch (e) {
         message.warn(e);

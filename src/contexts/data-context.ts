@@ -1,7 +1,7 @@
 import React from 'react';
 
 const DataContext = React.createContext({
-  data: [],
+  data: {} as any,
   setData: (dispatch: any): void => {},
 });
 export default DataContext;

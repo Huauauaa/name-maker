@@ -3,9 +3,12 @@ import DataContext from '../contexts/data-context';
 import { Table, Tag, Space, Popconfirm } from 'antd';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import '../assets/name-list.less';
+import { TablePaginationConfig } from 'antd/lib/table';
+import { AxiosResponse } from 'axios';
+import http from '../http';
 
 function NameList({ onDelete, onEdit }: any) {
-  const { data } = useContext(DataContext);
+  const { data, setData } = useContext(DataContext);
 
   const columns = [
     {
@@ -50,14 +53,25 @@ function NameList({ onDelete, onEdit }: any) {
       ),
     },
   ];
+
+  const onChange = async (pagination: TablePaginationConfig) => {
+    const response: AxiosResponse = await http.get(`/name`, {
+      params: {
+        page: pagination.current,
+      },
+    });
+    setData(response);
+  };
   return (
     <Table
-      dataSource={data}
+      dataSource={data.items}
       columns={columns}
       rowKey="_id"
       pagination={{
         showTotal: (total) => `共 ${total} 项`,
+        total: data.total,
       }}
+      onChange={onChange}
     />
   );
 }
