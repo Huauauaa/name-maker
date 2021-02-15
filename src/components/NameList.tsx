@@ -58,6 +58,7 @@ function NameList({ onDelete, onEdit }: any) {
     const response: AxiosResponse = await http.get(`/name`, {
       params: {
         page: pagination.current,
+        size: pagination.pageSize,
       },
     });
     setData(response);
