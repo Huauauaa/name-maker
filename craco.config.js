@@ -1,4 +1,7 @@
 const CracoLessPlugin = require('craco-less');
+const GitRevisionPlugin = require('git-revision-webpack-plugin');
+const gitRevisionPlugin = new GitRevisionPlugin();
+const interpolateHtml = require('craco-interpolate-html-plugin');
 
 module.exports = {
   plugins: [
@@ -11,6 +14,18 @@ module.exports = {
             javascriptEnabled: true,
           },
         },
+      },
+    },
+    {
+      plugin: gitRevisionPlugin,
+    },
+    {
+      plugin: interpolateHtml,
+      options: {
+        title: 'Name Validation',
+        version: gitRevisionPlugin.version(),
+        branch: gitRevisionPlugin.branch(),
+        commitHash: gitRevisionPlugin.commithash(),
       },
     },
   ],

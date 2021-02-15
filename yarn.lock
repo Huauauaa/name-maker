@@ -4098,6 +4098,11 @@ cosmiconfig@^7.0.0:
     path-type "^4.0.0"
     yaml "^1.10.0"
 
+craco-interpolate-html-plugin@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.npm.taobao.org/craco-interpolate-html-plugin/download/craco-interpolate-html-plugin-0.0.5.tgz#1820652a6d95abd9c33110a892aea813c6594edc"
+  integrity sha1-GCBlKm2Vq9nDMRCokq6oE8ZZTtw=
+
 craco-less@^1.17.1:
   version "1.17.1"
   resolved "https://registry.npm.taobao.org/craco-less/download/craco-less-1.17.1.tgz?cache=0&sync_timestamp=1606457932562&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcraco-less%2Fdownload%2Fcraco-less-1.17.1.tgz#aa23cf10d09f0f99657bed977788cc9b501add70"
@@ -5912,6 +5917,11 @@ getpass@^0.1.1:
   integrity sha1-Xv+OPmhNVprkyysSgmBOi6YhSfo=
   dependencies:
     assert-plus "^1.0.0"
+
+git-revision-webpack-plugin@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.npm.taobao.org/git-revision-webpack-plugin/download/git-revision-webpack-plugin-3.0.6.tgz#5dd6c6829fae05b405059dea6195b23875d69d4d"
+  integrity sha1-XdbGgp+uBbQFBZ3qYZWyOHXWnU0=
 
 glob-parent@^3.1.0:
   version "3.1.0"
