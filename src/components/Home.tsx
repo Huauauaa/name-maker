@@ -1,13 +1,11 @@
 import React, {
   useState,
   useEffect,
-  useContext,
   SyntheticEvent,
   Dispatch,
   SetStateAction,
 } from 'react';
 import { Input, Table, List, Tag } from 'antd';
-import DataContext from '../contexts/data-context';
 import _ from 'lodash';
 import '../assets/home.less';
 import http from '../http';
@@ -21,9 +19,8 @@ function Home() {
   const cachedCandidates = JSON.parse(
     localStorage.getItem('candidates') || '[]',
   );
-  const [input, setInput] = useState('');
+  const [, setInput] = useState('');
   const [target, setTarget] = useState([]);
-  const { data } = useContext(DataContext);
   const [wordInfo, setWordInfo] = useState([]);
   const [candidates, setCandidates]: [
     any,
@@ -34,6 +31,14 @@ function Home() {
   const onSearch = async (value: string) => {
     setInput(value);
     try {
+      const inputPinyins = pinyin(value, { style: pinyin.STYLE_NORMAL });
+      const resp: any = await http.get(`/name`, {
+        params: {
+          keyword: _.flatten(inputPinyins).join(','),
+        },
+      });
+      setTarget(resp.items);
+
       const response = await http.get(`/word`, {
         params: {
           wd: value,
@@ -45,21 +50,6 @@ function Home() {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    if (input) {
-      const inputPinyins = pinyin(input, { style: pinyin.STYLE_NORMAL });
-      setTarget(
-        data.filter(
-          (item: any) =>
-            _.intersection(_.flatten(inputPinyins), _.flatten(item.pinyin))
-              .length > 0,
-        ),
-      );
-    } else {
-      setTarget([]);
-    }
-  }, [input, data]);
 
   useEffect(() => {
     localStorage.setItem('candidates', JSON.stringify(candidates));
@@ -116,7 +106,7 @@ function Home() {
       />
 
       <div className="search-result">
-        {target.map((item: any) => item.name).join(', ')}
+        {target.map((item: NameType) => item.name).join(', ')}
       </div>
       <Input
         addonAfter={<PlusOutlined onClick={onAddCandidate} />}
