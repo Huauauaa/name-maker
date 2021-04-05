@@ -7,7 +7,7 @@ import { TablePaginationConfig } from 'antd/lib/table';
 import { AxiosResponse } from 'axios';
 import http from '../http';
 
-function NameList({ onDelete, onEdit }: any) {
+function NameList({ onDelete, onEdit, keyword }: any) {
   const { data, setData } = useContext(DataContext);
 
   const columns = [
@@ -59,6 +59,7 @@ function NameList({ onDelete, onEdit }: any) {
       params: {
         page: pagination.current,
         size: pagination.pageSize,
+        keyword,
       },
     });
     setData(response);
@@ -71,6 +72,7 @@ function NameList({ onDelete, onEdit }: any) {
       pagination={{
         showTotal: (total) => `共 ${total} 项`,
         total: data.total,
+        size: data.size,
       }}
       onChange={onChange}
     />

@@ -30,6 +30,9 @@ function Home() {
 
   const onSearch = async (value: string) => {
     setInput(value);
+    if (_.isEmpty(value)) {
+      return;
+    }
     try {
       const inputPinyins = pinyin(value, { style: pinyin.STYLE_NORMAL });
       const resp: any = await http.get(`/name`, {

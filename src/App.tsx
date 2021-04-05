@@ -2,7 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import './assets/App.less';
 import DataContext from './contexts/data-context';
 import { Menu } from 'antd';
-import { UnorderedListOutlined, HomeOutlined } from '@ant-design/icons';
+import {
+  UnorderedListOutlined,
+  HomeOutlined,
+  ToolOutlined,
+} from '@ant-design/icons';
 
 import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import routers from './route';
@@ -47,6 +51,9 @@ function App() {
                             icon={<UnorderedListOutlined />}
                           >
                             数据
+                          </Menu.Item>
+                          <Menu.Item key="/tool" icon={<ToolOutlined />}>
+                            工具
                           </Menu.Item>
                         </Menu>
                         <route.component {...props}></route.component>

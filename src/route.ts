@@ -1,6 +1,7 @@
 import NameList from './components/NameList';
 import Home from './components/Home';
 import Dashboard from './views/Dashboard';
+import ToolView from './views/ToolView';
 
 const routers = [
   {
@@ -12,6 +13,11 @@ const routers = [
     path: '/dashboard',
     name: 'dashboard',
     component: Dashboard,
+  },
+  {
+    path: '/tool',
+    name: 'tool',
+    component: ToolView,
   },
   {
     path: '/list',
